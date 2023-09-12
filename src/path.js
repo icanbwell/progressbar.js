@@ -22,8 +22,8 @@ var Path = function Path(path, opts) {
         delay: 0,
         duration: 800,
         easing: 'linear',
-        from: {},
-        to: {},
+        from: Object.create(null),
+        to: Object.create(null),
         step: function() {}
     }, opts);
 
@@ -77,17 +77,17 @@ Path.prototype.stop = function stop() {
 // Method introduced here:
 // http://jakearchibald.com/2013/animated-line-drawing-svg/
 Path.prototype.animate = function animate(progress, opts, cb) {
-    opts = opts || {};
+    opts = opts || Object.create(null);
 
     if (utils.isFunction(opts)) {
         cb = opts;
-        opts = {};
+        opts = Object.create(null);
     }
 
-    var passedOpts = utils.extend({}, opts);
+    var passedOpts = utils.extend(Object.create(null), opts);
 
     // Copy default opts to new object so defaults are not modified
-    var defaultOpts = utils.extend({}, this._opts);
+    var defaultOpts = utils.extend(Object.create(null), this._opts);
     opts = utils.extend(defaultOpts, opts);
 
     var shiftyEasing = this._easing(opts.easing);

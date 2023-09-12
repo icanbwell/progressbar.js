@@ -6,21 +6,24 @@ var FLOAT_COMPARISON_EPSILON = 0.001;
 // Copy all attributes from source object to destination object.
 // destination object is mutated.
 function extend(destination, source, recursive) {
-    destination = destination || {};
-    source = source || {};
+    destination = destination || Object.create(null);
+    source = source || Object.create(null);
     recursive = recursive || false;
 
-    for (var attrName in source) {
-        if (source.hasOwnProperty(attrName)) {
-            var destVal = destination[attrName];
-            var sourceVal = source[attrName];
+    Object.keys(source).forEach(function(key) {
+        if (
+          Object.prototype.hasOwnProperty.call(source, key) &&
+          !isInheritedFromPrototypeChain(key)
+        ) {
+            var destVal = destination[key];
+            var sourceVal = source[key];
             if (recursive && isObject(destVal) && isObject(sourceVal)) {
-                destination[attrName] = extend(destVal, sourceVal, recursive);
+                destination[key] = extend(destVal, sourceVal, recursive);
             } else {
-                destination[attrName] = sourceVal;
+                destination[key] = sourceVal;
             }
         }
-    }
+    });
 
     return destination;
 }
@@ -100,6 +103,13 @@ function isObject(obj) {
 
     var type = typeof obj;
     return type === 'object' && !!obj;
+}
+
+// Helps in deciding if a property is present in Object's prototypal chain.
+// It does so by checking if the passed prop/key is present in an empty object.
+function isInheritedFromPrototypeChain(key) {
+    var emptyObj = {};
+    return emptyObj[key] !== undefined;
 }
 
 function forEachObject(object, callback) {
