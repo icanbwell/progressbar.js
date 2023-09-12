@@ -765,10 +765,7 @@ function extend(destination, source, recursive) {
     recursive = recursive || false;
 
     Object.keys(source).forEach(function(key) {
-        if (
-          Object.prototype.hasOwnProperty.call(source, key) &&
-          !isInheritedFromPrototypeChain(key)
-        ) {
+        if (!isInheritedFromPrototypeChain(key)) {
             var destVal = destination[key];
             var sourceVal = source[key];
             if (recursive && isObject(destVal) && isObject(sourceVal)) {
