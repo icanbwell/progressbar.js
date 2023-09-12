@@ -33,15 +33,13 @@ function extend(destination, source, recursive) {
 function render(template, vars) {
     var rendered = template;
 
-    for (var key in vars) {
-        if (vars.hasOwnProperty(key)) {
-            var val = vars[key];
-            var regExpString = '\\{' + key + '\\}';
-            var regExp = new RegExp(regExpString, 'g');
+    Object.keys(vars).forEach(function (key){
+        var val = vars[key];
+        var regExpString = '\\{' + key + '\\}';
+        var regExp = new RegExp(regExpString, 'g');
 
-            rendered = rendered.replace(regExp, val);
-        }
-    }
+        rendered = rendered.replace(regExp, val);
+    })
 
     return rendered;
 }
@@ -110,12 +108,10 @@ function isInheritedFromPrototypeChain(key) {
 }
 
 function forEachObject(object, callback) {
-    for (var key in object) {
-        if (object.hasOwnProperty(key)) {
-            var val = object[key];
-            callback(val, key);
-        }
-    }
+    Object.keys(object).forEach(function (key){
+        var val = object[key];
+        callback(val, key);
+    })
 }
 
 function floatEquals(a, b) {
