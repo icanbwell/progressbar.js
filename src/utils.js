@@ -6,21 +6,21 @@ var FLOAT_COMPARISON_EPSILON = 0.001;
 // Copy all attributes from source object to destination object.
 // destination object is mutated.
 function extend(destination, source, recursive) {
-    destination = destination || {};
-    source = source || {};
+    destination = destination || Object.create(null);
+    source = source || Object.create(null);
     recursive = recursive || false;
 
-    for (var attrName in source) {
-        if (source.hasOwnProperty(attrName)) {
-            var destVal = destination[attrName];
-            var sourceVal = source[attrName];
+    Object.keys(source).forEach(function(key) {
+        if (!isInheritedFromPrototypeChain(key)) {
+            var destVal = destination[key];
+            var sourceVal = source[key];
             if (recursive && isObject(destVal) && isObject(sourceVal)) {
-                destination[attrName] = extend(destVal, sourceVal, recursive);
+                destination[key] = extend(destVal, sourceVal, recursive);
             } else {
-                destination[attrName] = sourceVal;
+                destination[key] = sourceVal;
             }
         }
-    }
+    });
 
     return destination;
 }
@@ -33,15 +33,13 @@ function extend(destination, source, recursive) {
 function render(template, vars) {
     var rendered = template;
 
-    for (var key in vars) {
-        if (vars.hasOwnProperty(key)) {
-            var val = vars[key];
-            var regExpString = '\\{' + key + '\\}';
-            var regExp = new RegExp(regExpString, 'g');
+    Object.keys(vars).forEach(function (key){
+        var val = vars[key];
+        var regExpString = '\\{' + key + '\\}';
+        var regExp = new RegExp(regExpString, 'g');
 
-            rendered = rendered.replace(regExp, val);
-        }
-    }
+        rendered = rendered.replace(regExp, val);
+    })
 
     return rendered;
 }
@@ -102,13 +100,18 @@ function isObject(obj) {
     return type === 'object' && !!obj;
 }
 
+// Helps in deciding if a property is present in Object's prototypal chain.
+// It does so by checking if the passed prop/key is present in an empty object.
+function isInheritedFromPrototypeChain(key) {
+    var emptyObj = {};
+    return emptyObj[key] !== undefined;
+}
+
 function forEachObject(object, callback) {
-    for (var key in object) {
-        if (object.hasOwnProperty(key)) {
-            var val = object[key];
-            callback(val, key);
-        }
-    }
+    Object.keys(object).forEach(function (key){
+        var val = object[key];
+        callback(val, key);
+    })
 }
 
 function floatEquals(a, b) {

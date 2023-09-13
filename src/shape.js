@@ -252,7 +252,7 @@ Shape.prototype._createTrail = function _createTrail(opts) {
     var pathString = this._trailString(opts);
 
     // Prevent modifying original
-    var newOpts = utils.extend({}, opts);
+    var newOpts = utils.extend(Object.create(null), opts);
 
     // Defaults for parameters which modify trail path
     if (!newOpts.trailColor) {
