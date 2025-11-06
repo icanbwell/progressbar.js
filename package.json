@@ -27,7 +27,7 @@
     "karma-polyfill": "^1.1.0",
     "karma-sauce-launcher": "^1.2.0",
     "lodash": "^2.4.1",
-    "mocha": "^2.0.1",
+    "mocha": "^11.7.5",
     "mustache": "^2.3.0",
     "node-static": "^0.7.7",
     "np": "^5.1.2",
@@ -35,7 +35,7 @@
     "shelljs": "^0.3.0",
     "sinon": "~1.14.1",
     "string": "^2.2.0",
-    "testem": "^1.6.0",
+    "testem": "^3.16.0",
     "watchify": "^3.9.0"
   },
   "scripts": {
